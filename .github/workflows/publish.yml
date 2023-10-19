@@ -1,0 +1,30 @@
+name: Publish DMM typechain package
+on: 
+  release:
+    types: 
+      - created
+jobs:
+  Publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Setup node"
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+              
+      - name: "Create .npmrc"
+        run: |
+          echo "@Revelator-il:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
+
+      - name: "Publish"
+        run: |
+          npm publish 
