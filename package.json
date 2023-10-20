@@ -1,11 +1,14 @@
 {
-  "name": "npmplayground",
+  "name": "@denciu/npmplayground",
   "version": "1.1.0",
   "description": "Rocking with npm",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "src/test.txt"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/denciu/npmPlayground.git"
@@ -18,5 +21,13 @@
   "bugs": {
     "url": "https://github.com/denciu/npmPlayground/issues"
   },
-  "homepage": "https://github.com/denciu/npmPlayground#readme"
+  "homepage": "https://github.com/denciu/npmPlayground#readme",
+  "dependencies": {
+    "enquirer": "^2.4.1",
+    "inquirer": "^9.2.11"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
 }
