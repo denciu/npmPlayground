@@ -119,7 +119,7 @@ export const run = async () => {
     
     console.log(log)
     
-    const confirm = await inquirer
+    const {confirm} = await inquirer
     .prompt([
       {
         type: "expand",
