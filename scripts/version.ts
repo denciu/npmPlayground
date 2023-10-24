@@ -143,7 +143,7 @@ export const run = async () => {
                     "generate_release_notes":false
                 })
             })
-            console.log(await res.json())
+            console.log(res.status)
         } catch(err) {
             console.error(err)
             console.error('\n' + 'Error: Release failed. You may need to make a release by your own through Github')
