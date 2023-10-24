@@ -126,7 +126,7 @@ export const run = async () => {
         await execAsync(`git push --follow-tags --no-verify --atomic origin ${branch}`)
     
         try {
-            await fetch(`https://api.github.com/repos/${repoUrl}/releases`, {
+            const res = await fetch(`https://api.github.com/repos/${repoUrl}/releases`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/vnd.github+json',
@@ -143,6 +143,7 @@ export const run = async () => {
                     "generate_release_notes":false
                 })
             })
+            console.log(await res.json())
         } catch(err) {
             console.error(err)
             console.error('\n' + 'Error: Release failed. You may need to make a release by your own through Github')
