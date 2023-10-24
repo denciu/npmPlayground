@@ -16,6 +16,10 @@ const execAsync = (cmd: string) => {
     })
   }
 
+const logError = (msg: string) => {
+    console.error(`\nError: ${msg}\n`)
+}
+
 const setupEnv = async () => {
     const packageJsonBuffer = await readFile(join(process.cwd(), 'package.json'))
     const packageJson = JSON.parse(packageJsonBuffer.toString('utf-8'))
@@ -24,14 +28,14 @@ const setupEnv = async () => {
     const previousVersion = packageJson?.version
 
     if (!pkgName || !previousVersion) {
-        console.error(`Error: Couldn't get package.json`)
+        logError(`Couldn't get package.json`)
         return null
     }
 
-    const branch = await execAsync('git rev-parse --abbrev-ref "HEAD"')
-    console.log(branch)
+    const branch = await execAsync('git rev-parse --abbrev-ref "HEAD"') as string
+
     if (!branch) {
-        console.error(`Error: Couldn't get HEAD branch`)
+        logError(`Couldn't get HEAD branch`)
         return null
     }
 
@@ -41,14 +45,14 @@ const setupEnv = async () => {
 
     const remoteUrl = await execAsync('git config --get remote.origin.url')
     if (!remoteUrl) {
-        console.error(`Error: Remote 'origin' url not set`)
+        logError(`Remote 'origin' url not set`)
         return null
     }
     
     const repoUrlArr = /(?<=github.com[:|/]).*(?=\.git)/.exec(remoteUrl as string)
 
     if (repoUrlArr?.length !== 1) {
-        console.error(`Error: Couldn't identify repo owner/name`)
+        logError(`Couldn't identify repo owner/name`)
         return null
     }
 
@@ -58,7 +62,7 @@ const setupEnv = async () => {
     const token = npmrc.slice(npmrc.indexOf('ghp_'), npmrc.indexOf('ghp_') + 40);
 
     if (!/^ghp_[A-Za-z0-9]{36}$/.test(token)) {
-        console.error(`Error: Couldn't get Github token from .npmrc`)
+        logError(`Couldn't get Github token from .npmrc`)
         return null
     }
 
@@ -72,6 +76,27 @@ const setupEnv = async () => {
         token,
         repoUrl
     }
+}
+
+const validateGit = async (branch: string) => {
+    const status = await execAsync('git status --porcelain')
+    if (!!status) {
+        logError('Git must be in a clean state')
+        return false
+    }
+
+    await execAsync('git remote update')
+
+    const remoteBranch = `origin/${branch}`;
+    const unparsedDiff = await execAsync(`git rev-list --left-right --count ${remoteBranch}...${branch}`) as string
+    const [behind] = unparsedDiff.split("\t").map((val) => parseInt(val, 10))
+
+    if (!!behind) {
+        logError(`Local branch '${branch}' is behind remote upstream origin/${branch}`)
+        return false
+    }
+
+    return true
 }
 
 export const run = async () => {
@@ -114,11 +139,10 @@ export const run = async () => {
     ].join('\n')
 
     if (confirm) {
-        const status = await execAsync('git status --porcelain')
-        if (!!status) {
-            console.error('\nError: Git must be in a clean state\n')
+        const hasError = await validateGit(branch)
+        if (hasError) {
             return
-        } 
+        }
         await execAsync('npm version patch --no-git-tag-version')
         await execAsync(`git tag ${nextTag} -m ${nextTag}`)
         await execAsync(`git commit -am "Publish"`)
@@ -145,13 +169,13 @@ export const run = async () => {
             })
 
             if (!res.ok) {
+                logError(`Release failed. You may need to make a release by your own through Github`)
                 console.error(await res.json())
-                console.error('\n' + 'Error: Release failed. You may need to make a release by your own through Github')
             }
 
         } catch(err) {
+            logError(`Release failed. You may need to make a release by your own through Github`)
             console.error(err)
-            console.error('\n' + 'Error: Release failed. You may need to make a release by your own through Github')
         }
         
     }
