@@ -25,7 +25,7 @@ const setupEnv = async () => {
     const packageJsonBuffer = await readFile(join(process.cwd(), 'package.json'))
     const packageJson = JSON.parse(packageJsonBuffer.toString('utf-8'))
     
-    const pkgName = packageJson?.name
+    const pkgName = packageJson?.name 
     const previousVersion = packageJson?.version
 
     if (!pkgName || !previousVersion) {
