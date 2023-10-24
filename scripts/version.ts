@@ -88,8 +88,8 @@ const validateGit = async (branch: string) => {
 
     await execAsync('git remote update')
 
-    const remoteBranch = `origin/${branch}`;
-    const unparsedDiff = await execAsync('git rev-list --left-right --count ' + remoteBranch + '...' + branch) as string
+    const diff = `origin/${branch}...${branch}`;
+    const unparsedDiff = await execAsync(`git rev-list --left-right --count ${diff}`) as string
     // const unparsedDiff = await execAsync(`git rev-list --left-right --count ${remoteBranch}...${branch}`) as string
     const [behind] = unparsedDiff.split("\t").map((val) => parseInt(val, 10))
 
