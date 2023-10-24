@@ -90,7 +90,6 @@ const validateGit = async (branch: string) => {
 
     const command = `git rev-list --left-right --count origin/${branch}...${branch}`.replace('\n', '');
     const unparsedDiff = await execAsync(command) as string
-    // const unparsedDiff = await execAsync(`git rev-list --left-right --count ${remoteBranch}...${branch}`) as string
     const [behind] = unparsedDiff.split("\t").map((val) => parseInt(val, 10))
 
     if (!!behind) {
@@ -136,7 +135,7 @@ export const run = async () => {
     ])
 
     const releaseDescription = [
-        `## [1.0.2](https://github.com/${repoUrl}/compare/${previousTag}...${nextTag}) (${new Date().toISOString().split('T')[0]})`, 
+        `## [${nextTag}](https://github.com/${repoUrl}/compare/${previousTag}...${nextTag}) (${new Date().toISOString().split('T')[0]})`, 
         `**Note:** Version bump only for package ${pkgName}`
     ].join('\n')
 
