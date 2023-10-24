@@ -18,7 +18,7 @@ const execAsync = (cmd: string) => {
   }
 
 const logError = (msg: string) => {
-    console.error(`\nError: ${msg}\n`)
+    console.error(`\nError: ${msg.replace('\n', '')}\n`)
 }
 
 const setupEnv = async () => {
@@ -33,10 +33,11 @@ const setupEnv = async () => {
         return null
     }
 
-    const branch = await execAsync('git rev-parse --abbrev-ref "HEAD"') as string
-
+    const branchWithOrigin = await execAsync('git rev-parse --abbrev-ref "origin/HEAD"') as string
+    const branch = branchWithOrigin?.replace('origin/', '')
+    
     if (!branch) {
-        logError(`Couldn't get HEAD branch`)
+        logError(`Couldn't get HEAD branch from origin`)
         return null
     }
 
@@ -80,6 +81,12 @@ const setupEnv = async () => {
 }
 
 const validateGit = async (branch: string) => {
+    const currentBranch = await execAsync('git rev-parse --abbrev-ref "HEAD"') as string
+    if (currentBranch !== branch) {
+        logError(`Only releases from ${branch} branch are allowed`)
+        return true
+    }
+
     const status = await execAsync('git status --porcelain')
     if (!!status) {
         logError('Git must be in a clean state')
