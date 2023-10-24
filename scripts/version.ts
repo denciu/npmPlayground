@@ -16,14 +16,6 @@ const execAsync = (cmd: string) => {
     })
   }
 
-const requireGitCleanState = async () => {
-    const status = await execAsync('git status --porcelain')
-    if (!!status) {
-        console.error('\nError: Git must be in a clean state\n')
-        return
-    }   
-}
-
 const setupEnv = async () => {
     const packageJsonBuffer = await readFile(join(process.cwd(), 'package.json'))
     const packageJson = JSON.parse(packageJsonBuffer.toString('utf-8'))
@@ -122,7 +114,11 @@ export const run = async () => {
     ].join('\n')
 
     if (confirm) {
-        await requireGitCleanState()
+        const status = await execAsync('git status --porcelain')
+        if (!!status) {
+            console.error('\nError: Git must be in a clean state\n')
+            return
+        } 
         await execAsync('npm version patch --no-git-tag-version')
         await execAsync(`git tag ${nextTag} -m ${nextTag}`)
         await execAsync(`git commit -am "Publish"`)
