@@ -82,7 +82,7 @@ const validateGit = async (branch: string) => {
     const status = await execAsync('git status --porcelain')
     if (!!status) {
         logError('Git must be in a clean state')
-        return false
+        return true
     }
 
     await execAsync('git remote update')
@@ -93,10 +93,10 @@ const validateGit = async (branch: string) => {
 
     if (!!behind) {
         logError(`Local branch '${branch}' is behind remote upstream origin/${branch}`)
-        return false
+        return true
     }
 
-    return true
+    return false
 }
 
 export const run = async () => {
