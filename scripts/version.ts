@@ -16,7 +16,11 @@ const execAsync = (cmd: string) => {
   }
 
 const requireGitCleanState = async () => {
-        
+    const status = await execAsync('git status --porcelain')
+    if (!!status) {
+        console.error('\nError: Git must be in a clean state\n')
+        return
+    }   
 }
 
 export const run = async () => {
@@ -44,16 +48,13 @@ export const run = async () => {
     ])
 
     if (confirm) {
-        const status = await execAsync('git status --porcelain')
-        if (!!status) {
-            console.error('\nError: Git must be in a clean state\n')
-            return
-        }
         await requireGitCleanState()
         const tag = `${pkgName}@${nextVersion}`
         await execAsync('npm version patch --no-git-tag-version')
         await execAsync(`git tag ${tag} -m ${tag}`)
         await execAsync(`git commit -am "Publish"`)
+        const mainBranch = await execAsync('git rev-parse --abbrev-ref "HEAD"')
+        await execAsync(`git push --follow-tags --no-verify --atomic origin ${mainBranch}`)
     }
 }
 
