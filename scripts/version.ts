@@ -135,7 +135,7 @@ export const run = async () => {
                 },
                 body: JSON.stringify({
                     "tag_name": nextTag,
-                    "target_commitish": branch,
+                    // "target_commitish": branch,
                     "name": nextTag,
                     "body": releaseDescription,
                     "draft":false,
