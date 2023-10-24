@@ -1,10 +1,11 @@
 {
   "name": "@denciu/npmplayground",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Rocking with npm",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "elo": "ts-node scripts/version.ts"
   },
   "files": [
     "src/test.txt"
@@ -23,8 +24,11 @@
   },
   "homepage": "https://github.com/denciu/npmPlayground#readme",
   "dependencies": {
+    "@types/inquirer": "^9.0.6",
+    "@types/semver": "^7.5.4",
     "enquirer": "^2.4.1",
-    "inquirer": "^9.2.11"
+    "inquirer": "^8.0.0",
+    "semver": "^7.5.4"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",
