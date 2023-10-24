@@ -89,8 +89,8 @@ const validateGit = async (branch: string) => {
     await execAsync('git remote update')
 
     const remoteBranch = `origin/${branch}`;
-    // const unparsedDiff = await execAsync('git rev-list --left-right --count ' + remoteBranch + '...' + branch) as string
-    const unparsedDiff = await execAsync(`git rev-list --left-right --count ${remoteBranch}...${branch}`) as string
+    const unparsedDiff = await execAsync('git rev-list --left-right --count ' + remoteBranch + '...' + branch) as string
+    // const unparsedDiff = await execAsync(`git rev-list --left-right --count ${remoteBranch}...${branch}`) as string
     const [behind] = unparsedDiff.split("\t").map((val) => parseInt(val, 10))
 
     if (!!behind) {
@@ -142,7 +142,6 @@ export const run = async () => {
 
     if (confirm) {
         const hasError = await validateGit(branch)
-        console.log('hejka')
         if (hasError) {
             return
         }
