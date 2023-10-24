@@ -1,5 +1,5 @@
 {
-  "name": "@denciu/npmPlayground",
+  "name": "@denciu/npmplayground",
   "version": "1.1.11",
   "description": "Rocking with npm",
   "main": "index.js",
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/denciu/npmPlayground.git"
+    "url": "git+https://github.com/denciu/npmplayground.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/denciu/"
@@ -20,9 +20,9 @@
   "author": "DC",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/denciu/npmPlayground/issues"
+    "url": "https://github.com/denciu/npmplayground/issues"
   },
-  "homepage": "https://github.com/denciu/npmPlayground#readme",
+  "homepage": "https://github.com/denciu/npmplayground#readme",
   "dependencies": {
     "@types/node-fetch": "^2.6.7",
     "inquirer": "^8.0.0",
