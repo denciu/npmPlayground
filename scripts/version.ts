@@ -142,6 +142,7 @@ export const run = async () => {
 
     if (confirm) {
         const hasError = await validateGit(branch)
+        console.log('hejka')
         if (hasError) {
             return
         }
