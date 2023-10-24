@@ -29,7 +29,7 @@ const setupEnv = async () => {
     }
 
     const branch = await execAsync('git rev-parse --abbrev-ref "HEAD"')
-
+    console.log(branch)
     if (!branch) {
         console.error(`Error: Couldn't get HEAD branch`)
         return null
@@ -134,9 +134,9 @@ export const run = async () => {
                     "X-GitHub-Api-Version": "2022-11-28"
                 },
                 body: JSON.stringify({
-                    "tag_name":nextTag,
-                    "target_commitish":branch,
-                    "name":nextTag,
+                    "tag_name": nextTag,
+                    "target_commitish": branch,
+                    "name": nextTag,
                     "body": releaseDescription,
                     "draft":false,
                     "prerelease":false,
@@ -148,7 +148,7 @@ export const run = async () => {
                 console.error(await res.json())
                 console.error('\n' + 'Error: Release failed. You may need to make a release by your own through Github')
             }
-            
+
         } catch(err) {
             console.error(err)
             console.error('\n' + 'Error: Release failed. You may need to make a release by your own through Github')
