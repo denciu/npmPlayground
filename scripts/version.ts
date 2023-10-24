@@ -10,6 +10,7 @@ const execAsync = (cmd: string) => {
       exec(cmd, (error, stdout, stderr) => {
         if (error) {
           console.warn(error)
+          process.exit(1)
         }
         resolve(stdout || stderr)
       })
@@ -88,6 +89,7 @@ const validateGit = async (branch: string) => {
     await execAsync('git remote update')
 
     const remoteBranch = `origin/${branch}`;
+    // const unparsedDiff = await execAsync('git rev-list --left-right --count ' + remoteBranch + '...' + branch) as string
     const unparsedDiff = await execAsync(`git rev-list --left-right --count ${remoteBranch}...${branch}`) as string
     const [behind] = unparsedDiff.split("\t").map((val) => parseInt(val, 10))
 
