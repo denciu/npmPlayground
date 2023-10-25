@@ -152,8 +152,8 @@ export const run = async () => {
             return
         }
         await execAsync('npm version patch --no-git-tag-version')
-        await execAsync(`git tag ${nextTag} -m ${nextTag}`)
         await execAsync(`git commit -am "Publish"`)
+        await execAsync(`git tag ${nextTag} -m ${nextTag}`)
         
         await execAsync(`git push --follow-tags --no-verify --atomic origin ${branch}`)
     
